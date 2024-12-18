@@ -46,19 +46,25 @@ export class PublicationService {
     publicationId: string,
     updatePublicationDto: UpdatePublicationDto,
   ): Promise<IPublication> {
-    const existingPublication = await this.publicationModel.findByIdAndUpdate(
+     const existingPublication = await this.publicationModel.findByIdAndUpdate(
       publicationId,
       updatePublicationDto,
       { new: true },
     );
+    //  const existingPublication = await this.publicationModel.findById(publicationId);
+
     if (!existingPublication) {
       throw new NotFoundException(`Publication #${publicationId} not found`);
     }
-    return existingPublication;
+    return existingPublication; 
+/*    Object.assign(existingPublication, updatePublicationDto);
+
+  return await existingPublication.save(); */
   }
 
+  
   async getAllPublications(): Promise<IPublication[]> {
-    const publicationData = await this.publicationModel.find();
+    const publicationData = await this.publicationModel.find().populate('entreprise','name');
     if (!publicationData || publicationData.length == 0) {
       throw new NotFoundException("Publications data not found!");
     }
@@ -68,7 +74,7 @@ export class PublicationService {
   async getPublication(publicationId: string): Promise<IPublication> {
     const existingPublication = await this.publicationModel
       .findById(publicationId)
-      .exec();
+      .populate('entreprise','name');
     if (!existingPublication) {
       throw new NotFoundException(`Publication #${publicationId} not found`);
     }

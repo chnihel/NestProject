@@ -1,7 +1,8 @@
 /* eslint-disable prettier/prettier */
 
-import { Document, Types } from "mongoose";
-export interface IEntreprise extends Document {
+import { Types } from "mongoose";
+import { IUser } from "src/user/interface/user.interface";
+export interface IEntreprise extends IUser {
    logo: string;
   readonly numero: string;
   readonly siteweb: string;
@@ -9,6 +10,8 @@ export interface IEntreprise extends Document {
   readonly description: string;
   readonly archive: string;
   readonly item: string;
+     status: string;
+
    publication : Types.ObjectId []
      clientId : Types.ObjectId []
 

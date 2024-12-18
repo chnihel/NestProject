@@ -156,8 +156,9 @@ export class PublicationController {
 
   ) {
     try {
-      updatePublicationDto.image =  files ? files.map(file => file.filename) : [];
-
+      const existingImages = updatePublicationDto.image || [];
+      const newImages = files ? files.map((file) => file.filename):[];
+      updatePublicationDto.image =   [...existingImages, ...newImages];
       const existingPublication =
         await this.publicationService.UpdatePublication(
           publicationId,
@@ -181,7 +182,10 @@ export class PublicationController {
         publicationData,
       });
     } catch (err) {
-      return response.status(err.status).json(err.response);
+      return response.status(HttpStatus.BAD_REQUEST
+      ).json({
+        message: "Error fetching publications data"+err,
+      });
     }
   }
   @Get("/:id")
@@ -192,6 +196,7 @@ export class PublicationController {
       return response.status(HttpStatus.OK).json({
         message: "Publication found successfully",
         existingPublication,
+
       });
     } catch (err) {
       return response.status(err.status).json(err.response);
@@ -205,9 +210,12 @@ export class PublicationController {
       return response.status(HttpStatus.OK).json({
         message: "Publication deleted successfully",
         deletedPublication,
+        
       });
     } catch (err) {
       return response.status(err.status).json(err.response);
+
+
     }
   }
 }

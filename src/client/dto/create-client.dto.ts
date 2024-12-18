@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 
-import { IsNotEmpty, IsNumber, IsString, MaxLength } from "class-validator";
+import { IsNotEmpty, IsString, MaxLength } from "class-validator";
 import { Types } from "mongoose";
 import { CreateUserDto } from "src/user/dto/create-user.dto";
 export class CreateClientDto extends CreateUserDto {
@@ -18,10 +18,10 @@ export class CreateClientDto extends CreateUserDto {
   @MaxLength(30)
   @IsNotEmpty()
   readonly adresse: string;
-
+/* 
   @IsNumber()
   @IsNotEmpty()
-  readonly soldes: number;
+  readonly soldes: number; */
 
   @IsString()
   @MaxLength(30)
@@ -36,7 +36,7 @@ export class CreateClientDto extends CreateUserDto {
   readonly item: string;
 
 
-
+  panierId : Types.ObjectId []
    soldePointId : Types.ObjectId []
     readonly entrepriseId : Types.ObjectId []
 

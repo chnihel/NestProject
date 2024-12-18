@@ -12,6 +12,7 @@ import { ClientModule } from "./client/client.module";
 import { EntrepriseModule } from "./entreprise/entreprise.module";
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from "@nestjs/config";
+import { PanierModule } from './panier/panier.module';
 
 @Module({
   imports: [
@@ -25,7 +26,8 @@ import { ConfigModule } from "@nestjs/config";
     ClientModule,
     EntrepriseModule,
     AuthModule,
-    ConfigModule.forRoot({isGlobal:true})
+    ConfigModule.forRoot({isGlobal:true}),
+    PanierModule
   ],
   controllers: [AppController],
   providers: [AppService],

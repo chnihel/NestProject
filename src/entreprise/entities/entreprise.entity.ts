@@ -22,6 +22,9 @@ export class Entreprise extends User {
   @Prop()
   archive: string;
 
+  @Prop({default: 'Pending'})
+  status: string;
+
   item: string;
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'publication' }] })

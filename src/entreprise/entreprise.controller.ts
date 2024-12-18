@@ -11,6 +11,7 @@ import {
   Delete,
   UseInterceptors,
   UploadedFile,
+  //UseGuards,
 } from "@nestjs/common";
 import { EntrepriseService } from "./entreprise.service";
 import { CreateEntrepriseDto } from "./dto/create-entreprise.dto";
@@ -19,6 +20,7 @@ import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from "@nestjs/platform-express";
 import { extname } from "path";
 import { diskStorage } from "multer";
+//import { RefreshTokenGuard } from "src/common/guards/refreshToken.guard";
 
 
 @ApiTags('entreprise')
@@ -91,6 +93,7 @@ export class EntrepriseController {
     @UploadedFile() file
   ) {
     try {
+    
       creatEntrepriseDto.logo = file ? file.filename : null ;
       const newEntreprise =
         await this.entrepriseService.createEntreprise(creatEntrepriseDto);
@@ -163,18 +166,24 @@ export class EntrepriseController {
         cb(null , `${new Date().getTime()}${extname(file.originalname)}`)}
     })
   }))
-  async updateClient(
+  async updateEntreprise(
     @Res() response,
-    @Param("id") clientId: string,
+    @Param("id") entrepriseId: string,
     @Body() updateEntrepriseDto: UpdateEntrepriseDto,
     @UploadedFile() file
 
   ) {
     try {
-      updateEntrepriseDto.logo = file ? file.filename : null ;
+        const newLogo = file ? file.filename : null  ;
+      if(!newLogo){
+        updateEntrepriseDto.logo = updateEntrepriseDto.logo ;
+      }else {
+        updateEntrepriseDto.logo = newLogo ;
+      }
+      //updateEntrepriseDto.logo = file ? file.filename : null ;
 
       const existingEntreprise = await this.entrepriseService.UpdateEntreprise(
-        clientId,
+        entrepriseId,
         updateEntrepriseDto,
       );
       return response.status(HttpStatus.OK).json({
@@ -183,6 +192,29 @@ export class EntrepriseController {
       });
     } catch (err) {
       return response.status(err.status).json(err.response);
+    }
+  }
+  //@UseGuards(RefreshTokenGuard)
+  @Put("/updateStatus/:id")
+  async UpdateStatus(
+    @Res() response,
+    @Param("id") entrepriseId: string,
+  ){
+    try {
+      const existingEntreprise = await this.entrepriseService.updateStatus(
+        entrepriseId,
+      );
+      return response.status(HttpStatus.OK).json({
+        message: "Entreprise status has been successfully updated",
+        existingEntreprise,
+      });
+      
+    } catch (err) {
+            return response.status(err.status).json({
+              message: err.message,
+              status :HttpStatus.BAD_REQUEST
+            });
+
     }
   }
   @Get()

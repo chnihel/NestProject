@@ -19,6 +19,8 @@ export class UserService {
     hashData(data: string) {
     return argon2.hash(data);
   }
+
+  
 async hachPassword( userId: string,hachagePasswordDto: HachagePasswordDto): Promise<void> {
     const { oldPassword, newPassword } = hachagePasswordDto;
     console.log('Old Password:', oldPassword);

@@ -129,6 +129,7 @@ export class AdminController {
     } catch (err) {
       return response.status(err.status).json(err.response);
     }
+    
   }
 
   @Delete("/:id")

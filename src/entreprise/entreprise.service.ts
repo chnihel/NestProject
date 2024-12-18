@@ -50,8 +50,8 @@ export class EntrepriseService {
     entrepriseId: string,
     updateEntrepriseDto: UpdateEntrepriseDto,
   ): Promise<IEntreprise> {
-    const existingEntreprise = await this.EntrepriseModel.findByIdAndUpdate(
-      entrepriseId,
+    const existingEntreprise = await this.EntrepriseModel.findOneAndUpdate(
+      {_id:entrepriseId,item:'entreprise'},
       updateEntrepriseDto,
       { new: true },
     );
@@ -60,6 +60,27 @@ export class EntrepriseService {
     }
     return existingEntreprise;
   }
+
+  // function to update status of entreprise 
+  async updateStatus(
+    entrepriseId: string,
+    ): Promise<IEntreprise> {
+    /*   const existingEntreprise = await this.EntrepriseModel.findById(
+        {_id:entrepriseId,item:'entreprise'},
+        {status},
+        { new: true },
+        ); */
+        /*   const existingEntreprise = await this.EntrepriseModel.findById(
+        entrepriseId); */
+        const existingEntreprise = await this.EntrepriseModel.findOneAndUpdate(
+          {_id:entrepriseId,item:'entreprise'} , {$set : {status :"Acceptable"}}, { new: true },);
+        if (!existingEntreprise) {
+          throw new NotFoundException(`Entreprise #${entrepriseId} not found`);
+          }
+          const updateEntreprise = await existingEntreprise.save()
+          return updateEntreprise;
+          
+          }
 
   async getAllEntreprises(): Promise<IEntreprise[]> {
     const entrepriseData = await this.EntrepriseModel.find({
@@ -73,7 +94,7 @@ export class EntrepriseService {
 
   async getEntreprise(entrepriseId: string): Promise<IEntreprise> {
     const existingEntreprise =
-      await this.EntrepriseModel.findById(entrepriseId).exec();
+      await this.EntrepriseModel.findById(entrepriseId).populate('publication');;
     if (!existingEntreprise) {
       throw new NotFoundException(`Entreprise #${entrepriseId} not found`);
     }
@@ -88,4 +109,5 @@ export class EntrepriseService {
     }
     return deletedEntreprise;
   }
+
 }

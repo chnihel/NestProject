@@ -14,8 +14,8 @@ export class Client extends User {
   @Prop({ required: true })
   adresse: string;
 
-  @Prop()
-  soldes: number;
+/*   @Prop()
+  soldes: number; */
 
   @Prop()
   classement: string;
@@ -26,6 +26,9 @@ export class Client extends User {
   item: string;
 
 
+
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'panier' }] })
+  panierId : Types.ObjectId []
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'soldePoint' }] })
   soldePointId : Types.ObjectId []

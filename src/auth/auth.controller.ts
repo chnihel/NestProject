@@ -3,7 +3,6 @@ import { Controller, Get, Post, Body,  Req, UseGuards, Param } from '@nestjs/com
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
 import { Request } from 'express';
-import { AccessTokenGuard } from './../common/guards/accessToken.guard';
 import { RefreshTokenGuard } from './../common/guards/refreshToken.guard';
 
 
@@ -29,7 +28,7 @@ export class AuthController {
 
 
 
-  @UseGuards(AccessTokenGuard)
+  @UseGuards(RefreshTokenGuard)
   @Get('logout')
   logout(@Req() req: Request) {
     this.authService.logout(req.user['sub']);
