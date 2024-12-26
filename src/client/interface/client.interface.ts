@@ -1,7 +1,8 @@
 /* eslint-disable prettier/prettier */
 
 import { Document, Types } from "mongoose";
-export interface IClient extends Document {
+import { IUser } from "src/user/interface/user.interface";
+export interface IClient extends IUser {
   readonly prenom: string;
   readonly dateNaissance: string;
   readonly adresse: string;
